@@ -1,0 +1,3 @@
+[submodule "gpt4_functions"]
+	path = gpt4_functions
+	url = git@github.com:JakobDylanC/gpt4_functions.git
