@@ -3,7 +3,7 @@ from twilio.rest import Client
 from flask import Flask, request
 import asyncio
 from datetime import datetime
-import gpt_functions
+from gpt4_functions import gpt4_functions
 
 for environ_name in ["TWILIO_PHONE_NUMBER", "TWILIO_ACCOUNT_SID", "TWILIO_AUTH_TOKEN", "CUSTOM_SYSTEM_PROMPT"]:
     if environ_name not in os.environ:
@@ -25,10 +25,10 @@ async def receive_sms():
             current_date = datetime.now().strftime("%B %d, %Y")
             system_prompt_content = f"{os.environ['CUSTOM_SYSTEM_PROMPT']}\nKnowledge cutoff: Sep 2021. Current date: {current_date}"
             system_prompt = [{"role": "system", "content": system_prompt_content}]
-            gpt_response = await gpt_functions.generate_response(system_prompt, message_history)
+            gpt_response = await gpt4_functions.generate_response(system_prompt, message_history)
             message_history.append({"role": "assistant", "content": gpt_response})
             message_histories[from_number] = message_history
-            response_chunks = gpt_functions.split_response(gpt_response, 960)
+            response_chunks = gpt4_functions.split_response(gpt_response, 960)
             for chunk in response_chunks:
                 twilio_client.messages.create(
                     body=chunk,
