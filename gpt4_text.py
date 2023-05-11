@@ -5,11 +5,10 @@ from flask import Flask, request
 from twilio.rest import Client
 from gpt4_functions import gpt4_functions
 
-# Check if the required environment variables are set
 REQUIRED_ENV_VARS = ["TWILIO_PHONE_NUMBER", "TWILIO_ACCOUNT_SID", "TWILIO_AUTH_TOKEN", "CUSTOM_SYSTEM_PROMPT"]
 missing_env_vars = [var for var in REQUIRED_ENV_VARS if var not in os.environ]
 if missing_env_vars:
-    raise ValueError(f"Required environment variables {', '.join(missing_env_vars)} are not set.")
+    raise ValueError(f"Required environment variables are not set: {', '.join(missing_env_vars)}")
 
 twilio_client = Client(os.environ["TWILIO_ACCOUNT_SID"], os.environ["TWILIO_AUTH_TOKEN"])
 app = Flask(__name__)
