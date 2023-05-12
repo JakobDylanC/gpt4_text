@@ -6,8 +6,7 @@ from twilio.rest import Client
 from gpt4_functions import gpt4_functions
 
 REQUIRED_ENV_VARS = ["TWILIO_PHONE_NUMBER", "TWILIO_ACCOUNT_SID", "TWILIO_AUTH_TOKEN", "CUSTOM_SYSTEM_PROMPT"]
-missing_env_vars = [var for var in REQUIRED_ENV_VARS if var not in os.environ]
-if missing_env_vars:
+if (missing_env_vars := [var for var in REQUIRED_ENV_VARS if var not in os.environ]):
     raise ValueError(f"Required environment variables are not set: {', '.join(missing_env_vars)}")
 
 twilio_client = Client(os.environ["TWILIO_ACCOUNT_SID"], os.environ["TWILIO_AUTH_TOKEN"])
@@ -59,7 +58,7 @@ async def receive_sms():
                     send_sms("Sorry, an error occurred. Please try again.", os.environ["TWILIO_PHONE_NUMBER"], from_number)
                     return
 
-            gpt_response = await gpt4_functions.generate_response(system_prompt.message, [msg.message for msg in user_session.message_history])
+            gpt_response = await gpt4_functions.generate_response(system_prompt.msg, [msg.msg for msg in user_session.message_history])
             response_msg = MsgNode({"role": "assistant", "content": gpt_response})
             user_session.append_to_history(response_msg)
 
